@@ -1,38 +1,17 @@
-# create-svelte
+# SvelteKit Query Params Issue
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+This repository contains a minimal reproducible example of an issue with SvelteKit's `$page` store not updating correctly when you manually set the query parameters in the URL using `history`.
 
-## Creating a project
+## Description
 
-If you're seeing this, you've probably already done this step. Congrats!
+In our SvelteKit application, we have a function that updates the query parameters in the URL using the `history` API. However, after updating the query parameters, the `$page` store does not reflect these changes. This behavior is inconsistent with the expected behavior, where the `$page` store should update to reflect the current state of the page, including the query parameters.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## Try it out
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+`npm install` and start a development server:
 
 ```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+and navigate to http://localhost:5173
