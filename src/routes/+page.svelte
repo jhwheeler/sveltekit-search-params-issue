@@ -1,13 +1,16 @@
 <script>
   import { page } from '$app/stores'
-	import { browser } from '$app/environment'
+  import { browser } from '$app/environment'
 
   let queryParams = ''
 
-  const updateQueryParams = () => {
+  function updateQueryParams() {
     queryParams = 'newParams'
+
     const params = new URLSearchParams(window.location.search)
+
     params.set('q', queryParams)
+
     history.replaceState(
       history.state,
       '',
@@ -15,9 +18,9 @@
     )
   }
 
-	$: currentSearchParams = browser ? Object.fromEntries($page.url.searchParams) : null
+  $: currentSearchParams = browser ? Object.fromEntries($page.url.searchParams) : null
 
-	$: console.log('currentSearchParams', currentSearchParams)
+  $: console.log('currentSearchParams', currentSearchParams)
 </script>
 
 <button on:click={updateQueryParams}>Update Query Params</button>
