@@ -3,33 +3,14 @@
   import { browser } from '$app/environment'
   import { goto } from '$app/navigation'
 
-  let queryParams = ''
   let value = ''
-
-  function updateQueryParamsWithHistory() {
-    if (!browser) return
-
-    queryParams = 'newParams'
-
-    const params = new URLSearchParams(window.location.search)
-
-    params.set('q', queryParams)
-
-    history.replaceState(
-      history.state,
-      '',
-      decodeURIComponent(`${window.location.pathname}?${params}`),
-    )
-  }
 
   function updateQueryParamsWithGoto(value) {
     if (!browser) return
 
-    queryParams = value
-
     const params = new URLSearchParams(window.location.search)
 
-    params.set('q', queryParams)
+    params.set('q', value)
 
     const destination = decodeURIComponent(`${window.location.pathname}?${params}`)
 
@@ -42,17 +23,10 @@
 
   $: value && updateQueryParamsWithGoto(value)
 
-  $: currentSearchParams = browser ? Object.fromEntries($page.url.searchParams) : null
-
-  $: console.log('currentSearchParams', currentSearchParams)
+  $: queryParams = $page.url.searchParams.get('q') || ''
 </script>
 
-<button on:click={updateQueryParamsWithHistory}>Update Query Params with `history`</button>
+<label for="input">Update query params:</label>
+<input id="input" bind:value type="text" />
 
 <p>Query Params: {queryParams}</p>
-
-<input bind:value type="text" on:change={updateQueryParamsWithHistory} />
-
-{#if browser}
-  <p>currentSearchParams: {JSON.stringify(currentSearchParams)}</p>
-{/if}
