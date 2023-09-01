@@ -1,10 +1,14 @@
 <script>
   import { page } from '$app/stores'
   import { browser } from '$app/environment'
+  import { goto } from '$app/navigation'
 
   let queryParams = ''
+  let value = ''
 
-  function updateQueryParams() {
+  function updateQueryParamsWithHistory() {
+    if (!browser) return
+
     queryParams = 'newParams'
 
     const params = new URLSearchParams(window.location.search)
@@ -18,13 +22,36 @@
     )
   }
 
+  function updateQueryParamsWithGoto(value) {
+    if (!browser) return
+
+    queryParams = value
+
+    const params = new URLSearchParams(window.location.search)
+
+    params.set('q', queryParams)
+
+    goto(decodeURIComponent(`${window.location.pathname}?${params}`), {
+      noScroll: true,
+      replaceState: true,
+      keepFocus: true,
+    }).then(v => {
+      console.log('v', v)
+    })
+  }
+
+  $: updateQueryParamsWithGoto(value)
+
   $: currentSearchParams = browser ? Object.fromEntries($page.url.searchParams) : null
 
   $: console.log('currentSearchParams', currentSearchParams)
 </script>
 
-<button on:click={updateQueryParams}>Update Query Params</button>
+<button on:click={updateQueryParamsWithHistory}>Update Query Params with `history`</button>
+
 <p>Query Params: {queryParams}</p>
+
+<input bind:value type="text" on:change={updateQueryParamsWithHistory} />
 
 {#if browser}
   <p>currentSearchParams: {JSON.stringify(currentSearchParams)}</p>
