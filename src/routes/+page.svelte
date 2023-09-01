@@ -31,16 +31,16 @@
 
     params.set('q', queryParams)
 
-    goto(decodeURIComponent(`${window.location.pathname}?${params}`), {
+    const destination = decodeURIComponent(`${window.location.pathname}?${params}`)
+
+    goto(destination, {
       noScroll: true,
       replaceState: true,
       keepFocus: true,
-    }).then(v => {
-      console.log('v', v)
-    })
+    }).then(() => console.log('goto finished navigating to:', destination))
   }
 
-  $: updateQueryParamsWithGoto(value)
+  $: value && updateQueryParamsWithGoto(value)
 
   $: currentSearchParams = browser ? Object.fromEntries($page.url.searchParams) : null
 
